@@ -53,9 +53,6 @@ $("#add-train-btn").on("click", function(event) {
   // Uploads train data to the database
   database.ref().push(newTrain);
 
-    // // storing the snapshot.val() in a variable for convenience
-    // var sv = newTrain.val();
-
     // Console.loging the last user's data
     console.log(newTrain.trainName);
     console.log(newTrain.destination);
