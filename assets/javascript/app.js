@@ -133,7 +133,7 @@ database.ref().on("child_added", function(childSnapshot) {
     $("<td>").text(trainName),
     $("<td>").text(destination),
     $("<td>").text(tFrequency),
-    $("<td>").text(nextTrain),
+    $("<td>").text(moment(nextTrain).format("hh:mm")),
     $("<td>").text(tMinutesTillTrain),
   );
   // moment($("#start-input").val().trim(), "MM/DD/YYYY").format("X");

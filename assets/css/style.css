@@ -36,10 +36,27 @@ div.card{
     filter: alpha(opacity=100);
     }
 
-label{
 
+label{
     opacity: 1.0;
 }
-div.p{
+
+
+#opacity{
     opacity: 1;
-}
+} 
+/* 
+.special-card {
+    /* create a custom class so you 
+       do not run into specificity issues 
+       against bootstraps styles
+       which tends to work better than using !important 
+       (future you will thank you later)*/
+      /* background-color: rgba(white, white, white, 0.7); 
+      opacity: .4;
+    } */
+/* 
+    .container{
+        background-color: rgba(white, white, white, 0.2); 
+      opacity: .4;
+    } */ */
