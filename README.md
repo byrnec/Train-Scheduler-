@@ -1,7 +1,12 @@
 # Train-Scheduler-
 
 ## Created by Christie Byrne
-### UC Berkeley Extension Coding Bootcamp, Homework for Section 7 Firebase
+### UC Berkeley Extension Coding Bootcamp
+
+Homework for Section 7 Firebase
+
+
+<img src="assets/images/readmephoto.png" width="680px" height= "500px" title="screenshot">
 
 
 ## Purpose of the game
