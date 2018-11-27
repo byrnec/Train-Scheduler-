@@ -1,168 +1,95 @@
-$(document).ready(function () {
-
-  // Some APIs will give us a cross-origin (CORS) error. This small function is a fix for that error. You can also check out the chrome extenstion (https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en).
-  jQuery.ajaxPrefilter(function (options) {
-    if (options.crossDomain && jQuery.support.cors) {
-      options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
-    }
-  });
-
-  // ===================== YOUR CODE HERE ==================
-
-// Create an event listener for the submission of the form with the id of `itunes`. 
-// Within that function, grab a hold of the value of the user's input in the `<input>` with the id of `term`.
-
-    $("#itunes").on("submit", function(event) {
-    event.preventDefault()
-    var term = $("#term").val()
-    
-
-$.ajax({
-    url: 'https://itunes.apple.com/search?term='+ term +'&entity=musicTrack',
-    method: "GET"
-  }).then(function (response) {
-
-// convert the giant string from step 2 into an object that you can see in your browser's console.
-//`parse` this string so that we instead get JSON (JavaScript Object Notation) back. 
-
-        console.log(JSON.parse(response))
-        var res = JSON.parse(response).results
 
 
-// To search for the values we want, create a loop which iterates through the results
-// in your response. 
-        for (var i = 0; i < res.length; i++) {
-
-// we want to `prepend` (so that the latest query will be shown at the top) our values 
-// within the div with the class of library.
- 
-          $(".library").prepend('<div class="song"><img class="thumb" src="' + res[i].artworkUrl100 + '"><h2 class="song-name">' + res[i].trackName + '</h2><h4 class="song-artist">' + res[i].artistName + '</h4><audio class="song-audio" src="' + res[i].previewUrl + '"controls></audio></div>')
-        }
-
-  $("#term").val("")
-      });
-    });
-
-  // ======================================================
-});
-
-
-    // 1. Initialize Firebase
+// 1. Initialize Firebase
 var config = {
-  apiKey: "AIzaSyDp41_Du7F_LvI7QJWsKZ-74G_wMcBHKLU",
-  authDomain: "fir-4bf97.firebaseapp.com",
-  databaseURL: "https://fir-4bf97.firebaseio.com",
-  projectId: "fir-4bf97",
-  storageBucket: "fir-4bf97.appspot.com",
-  messagingSenderId: "136577761643"
+  apiKey: "AIzaSyD12X07W6sE28As1dwK5BRQXFF5ahCWgr4",
+  authDomain: "train-scheduler-4bfb8.firebaseapp.com",
+  databaseURL: "https://train-scheduler-4bfb8.firebaseio.com",
+  projectId: "train-scheduler-4bfb8",
+  storageBucket: "train-scheduler-4bfb8.appspot.com",
+  messagingSenderId: "945998155748"
 };
-
 firebase.initializeApp(config);
+
 
 var database = firebase.database();
 
-// 2. Button for adding Employees
-$("#add-employee-btn").on("click", function(event) {
+
+    // Initial Values
+    var trainName = "";
+    var destination= "";
+    var firstTrainTime= 0;
+    var frequency = "";
+
+// 2. Button for adding Trains
+$("#add-train-btn").on("click", function(event) {
   event.preventDefault();
 
-  // Grabs user input
-  var empName = $("#employee-name-input").val().trim();
-  var empRole = $("#role-input").val().trim();
-  var empStart = moment($("#start-input").val().trim(), "MM/DD/YYYY").format("X");
-  var empRate = $("#rate-input").val().trim();
+      // Grab values from text boxes
+      var trainName = $("#train-name-input").val().trim();
+      var destination = $("#dest-input").val().trim();
+      var firstTrainTime = $("#first-time-input").val().trim();
+      var frequency = $("#freq-input").val().trim();
 
-  // Creates local "temporary" object for holding employee data
-  var newEmp = {
-    name: empName,
-    role: empRole,
-    start: empStart,
-    rate: empRate
+  // Creates local "temporary" object for holding train data
+  var newTrain = {
+    trainName: trainName,
+    destination: destination,
+    firstTrainTime: firstTrainTime,
+    frequency: frequency,   
   };
 
-  // Uploads employee data to the database
-  database.ref().push(newEmp);
 
-  // Logs everything to console
-  console.log(newEmp.name);
-  console.log(newEmp.role);
-  console.log(newEmp.start);
-  console.log(newEmp.rate);
+      // // Code for handling the push --here we arent creating 
+      //a new object, we are just putting WHOLE object into the push
 
-  alert("Employee successfully added");
+      // database.ref().push({
+      //   trainName: trainName,
+      //   destination: destination,
+      //   firstTrainTime: firstTrainTime,
+      //   frequency: frequency,
+      //   dateAdded: firebase.database.ServerValue.TIMESTAMP
+
+  // Uploads train data to the database
+  database.ref().push(newTrain);
+
+    // // storing the snapshot.val() in a variable for convenience
+    // var sv = newTrain.val();
+
+    // Console.loging the last user's data
+    console.log(newTrain.trainName);
+    console.log(newTrain.destination);
+    console.log(newTrain.firstTrainTime);
+    console.log(newTrain.frequency);
+
+  alert("Train successfully added");
 
   // Clears all of the text-boxes
-  $("#employee-name-input").val("");
-  $("#role-input").val("");
-  $("#start-input").val("");
-  $("#rate-input").val("");
+  $("#train-name-input").val("");
+  $("#dest-input").val("");
+  $("#first-time-input").val("");
+  $("#freq-input").val("");
+
 });
 
-// 3. Create Firebase event for adding employee to the database and a row in the html when a user adds an entry
-database.ref().on("child_added", function(childSnapshot) { //executes this on page load AND when a child (new entry) is added
+  
+// 3. Create Firebase event for adding train to the database and a row in the html when a user adds an entry
+database.ref().on("child_added", function(childSnapshot) { 
+  //executes this on page load AND when a child (new entry) is added
   console.log(childSnapshot.val());
 
   // Store everything into a variable.
-  var empName = childSnapshot.val().name;
-  var empRole = childSnapshot.val().role;
-  var empStart = childSnapshot.val().start;
-  var empRate = childSnapshot.val().rate;
-
-  // Employee Info
-  console.log(empName);
-  console.log(empRole);
-  console.log(empStart);
-  console.log(empRate);
-
-  // Prettify the employee start
-  
-
-  // Create the new row
-  var newRow = $("<tr>").append(
-    $("<td>").text(empName),
-    $("<td>").text(empRole),
-    $("<td>").text(empStart),
-   
-    $("<td>").text(empRate),
-    
-  );
-
-  // Append the new row to the table
-  $("#employee-table > tbody").append(newRow);
-});
+  var trainName= childSnapshot.val().trainName;
+  var destination = childSnapshot.val().destination;
 
 
-    // (TEST 1)
-    // First Train of the Day is 3:00 AM
-    // Assume Train comes every 3 minutes.
-    // Assume the current time is 3:16 AM....
-    // What time would the next train be...? (Use your brain first)
-    // It would be 3:18 -- 2 minutes away
-
-    // (TEST 2)
-    // First Train of the Day is 3:00 AM
-    // Assume Train comes every 7 minutes.
-    // Assume the current time is 3:16 AM....
-    // What time would the next train be...? (Use your brain first)
-    // It would be 3:21 -- 5 minutes away
-// Solved Mathematically
-    // Test case 1:
-    // 16 - 00 = 16
-    // 16 % 3 = 1 (Modulus is the remainder)
-    // 3 - 1 = 2 minutes away
-    // 2 + 3:16 = 3:18
-
-    // Solved Mathematically
-    // Test case 2:
-    // 16 - 00 = 16
-    // 16 % 7 = 2 (Modulus is the remainder)
-    // 7 - 2 = 5 minutes away
-    // 5 + 3:16 = 3:21
+// Calculating time variables
 
     // Assumptions
-    var tFrequency = 3;
+    var tFrequency = childSnapshot.val().frequency;
 
     // Time is 3:30 AM
-    var firstTime = "03:30";
+    var firstTime = childSnapshot.val().firstTrainTime;
 
     // First Time (pushed back 1 year to make sure it comes before current time)
     var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
@@ -187,4 +114,36 @@ database.ref().on("child_added", function(childSnapshot) { //executes this on pa
     // Next Train
     var nextTrain = moment().add(tMinutesTillTrain, "minutes");
     console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+
+
+
+
+
+  // Train Info
+  console.log(trainName);
+  console.log(destination);
+  console.log(firstTrainTime);
+  console.log(frequency);
+
+  console.log(nextTrain);
+  console.log(tMinutesTillTrain);
+
+  // Create the new row
+  var newRow = $("<tr>").append(
+    $("<td>").text(trainName),
+    $("<td>").text(destination),
+    $("<td>").text(tFrequency),
+    $("<td>").text(nextTrain),
+    $("<td>").text(tMinutesTillTrain),
+  );
+  // moment($("#start-input").val().trim(), "MM/DD/YYYY").format("X");
+
+  // Append the new row to the table
+  $("#train-table > tbody").append(newRow);
+
+
+     // Handle the errors
+  }, function(errorObject) {
+      console.log("Errors handled: " + errorObject.code);
+    });
 

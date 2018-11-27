@@ -1,0 +1,45 @@
+#train-table th,
+td {
+  display: inline-block;
+  width: 16.575%;
+}
+.header {
+    color: white;
+    background: none;
+    opacity: 100;
+    padding: 30px;
+    font-size: 70px;
+    font-family: 'Carter One', cursive;
+
+}
+.text-center{
+
+    font-size: 67px;
+}
+.smaller{
+    font-family: 'Sedgwick Ave', cursive;
+    padding-top: 10px;
+    padding-top: 4px;
+    font-size: 27px;
+}
+
+
+body{
+background-image: url("../images/italy.jpg");
+background-repeat: no-repeat;
+background-size: cover;
+font-family: 'Sedgwick Ave', cursive;
+}
+
+div.card{
+    opacity: 0.5;
+    filter: alpha(opacity=100);
+    }
+
+label{
+
+    opacity: 1.0;
+}
+div.p{
+    opacity: 1;
+}
